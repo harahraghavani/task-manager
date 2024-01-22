@@ -6,7 +6,6 @@ const getTask = async (req, res) => {
     return res.json({
       status: 200,
       data: tasks,
-      error: "",
       message: "Task fetched successfully",
     });
   } catch (error) {
@@ -70,7 +69,7 @@ const addTask = async (req, res) => {
     return res.json({
       status: 200,
       data: {},
-      error: "",
+
       message: "Task added successfully",
     });
   } catch (error) {
@@ -132,7 +131,7 @@ const editTask = async (req, res) => {
     return res.json({
       status: 200,
       data: {},
-      error: "",
+
       message: "Task edited successfully",
     });
   } catch (error) {
@@ -172,7 +171,7 @@ const deleteTask = async (req, res) => {
     return res.json({
       status: 200,
       data: {},
-      error: "",
+
       message: "Task deleted successfully",
     });
   } catch (error) {

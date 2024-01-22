@@ -64,32 +64,31 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   try {
     const loginData = req.body;
-    console.log("loginData: ", loginData);
 
-    // if (!loginData.name) {
-    //   return res.json({
-    //     status: 400,
-    //     data: {},
-    //     error: "Name is required",
-    //   });
-    // }
-    // if (!loginData.email) {
-    //   return res.json({
-    //     status: 400,
-    //     data: {},
-    //     error: "Email is required",
-    //   });
-    // }
-    // if (!loginData.password) {
-    //   return res.json({
-    //     status: 400,
-    //     data: {},
-    //     error: "Password is required",
-    //   });
-    // }
+    if (!loginData.name) {
+      return res.json({
+        status: 400,
+        data: {},
+        error: "Name is required",
+      });
+    }
+    if (!loginData.email) {
+      return res.json({
+        status: 400,
+        data: {},
+        error: "Email is required",
+      });
+    }
+    if (!loginData.password) {
+      return res.json({
+        status: 400,
+        data: {},
+        error: "Password is required",
+      });
+    }
 
-    const isUserExist = await User.findOne({ email: loginData.email });
-    console.log("isUserExist: ", isUserExist);
+    // const isUserExist = await User.findOne({ email: loginData.email }).select("_id name email password")
+    const isUserExist = await User.findOne({ email: loginData.email })
 
     if (!isUserExist) {
       return res.json({
@@ -119,18 +118,26 @@ const login = async (req, res) => {
       },
       "secret"
     );
-    console.log("token: ", token);
+    
 
     // adding token key in object
-    isUserExist.token = token;
+    isUserExist.authToken = token;
     await isUserExist.save();
+
+    const response = {
+      id: isUserExist._id,
+      name: isUserExist.name,
+      email: isUserExist.email,
+      authToken: isUserExist.authToken
+    }
+
     return res.json({
       status: 200,
-      data: isUserExist,
+      data: response,
       message: "Login successful",
     });
   } catch (error) {
-    console.log("error: ", error);
+    
     return res.json({
       status: 500,
       data: {},
@@ -144,7 +151,7 @@ const logout = async (req, res) => {
     const userId = req.me._id;
 
     const findUser = await User.findById(userId);
-
+    
     if (!findUser) {
       return res.json({
         status: 404,
@@ -152,18 +159,11 @@ const logout = async (req, res) => {
         error: "User not found",
       });
     }
-    // await User.updateOne({ _id: userId }, { $set: { token: null } });
-    await User.updateOne(
-      {
-        _id: userId,
-      },
-      {
-        token: "",
-      }
-    );
+    const updatedUser = await User.updateOne({ authToken: findUser.authToken }, { $set: { authToken: "" } });
+
     return res.json({
       status: 200,
-      data: {},
+      data: updatedUser,
       message: "Logout successful",
     });
   } catch (error) {

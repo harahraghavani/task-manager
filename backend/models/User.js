@@ -14,6 +14,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  authToken: {
+    type: String,
+    default: ""
+  }
 });
 
 const User = mongoose.model("User", userSchema);
