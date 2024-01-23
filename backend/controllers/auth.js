@@ -47,9 +47,16 @@ const signup = async (req, res) => {
     });
 
     await user.save();
+
+    const response = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+    }
+
     return res.json({
       status: 200,
-      data: user,
+      data: response,
       message: "Signup successful",
     });
   } catch (error) {
@@ -87,7 +94,6 @@ const login = async (req, res) => {
       });
     }
 
-    // const isUserExist = await User.findOne({ email: loginData.email }).select("_id name email password")
     const isUserExist = await User.findOne({ email: loginData.email })
 
     if (!isUserExist) {
@@ -118,7 +124,7 @@ const login = async (req, res) => {
       },
       "secret"
     );
-    
+
 
     // adding token key in object
     isUserExist.authToken = token;
@@ -137,7 +143,7 @@ const login = async (req, res) => {
       message: "Login successful",
     });
   } catch (error) {
-    
+
     return res.json({
       status: 500,
       data: {},
@@ -151,7 +157,7 @@ const logout = async (req, res) => {
     const userId = req.me._id;
 
     const findUser = await User.findById(userId);
-    
+
     if (!findUser) {
       return res.json({
         status: 404,

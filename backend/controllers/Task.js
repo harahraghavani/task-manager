@@ -2,7 +2,7 @@ const Task = require("../models/Task");
 const getTask = async (req, res) => {
   try {
     const userId = req.me._id;
-    const tasks = await Task.find({ userId: userId });
+    const tasks = await Task.find({ userId: userId }).select("-__v -userId -createdAt -updatedAt");
     return res.json({
       status: 200,
       data: tasks,
@@ -46,20 +46,20 @@ const addTask = async (req, res) => {
       });
     }
 
-    // const isTaskExist = await Task.findOne({
-    //   title: taskData.title,
-    //   userId: userId,
-    // });
+    const isTaskExist = await Task.findOne({
+      title: taskData.title,
+      userId: userId,
+    });
 
-    // if (isTaskExist) {
-    //   return res.json({
-    //     status: 400,
-    //     data: {},
-    //     error: "Task already exist",
-    //   });
-    // }
+    if (isTaskExist) {
+      return res.json({
+        status: 400,
+        data: {},
+        error: "Task already exist",
+      });
+    }
 
-    const task = await Task.create({
+    await Task.create({
       title: taskData.title,
       status: taskData.status,
       priority: taskData.priority,
@@ -69,7 +69,6 @@ const addTask = async (req, res) => {
     return res.json({
       status: 200,
       data: {},
-
       message: "Task added successfully",
     });
   } catch (error) {

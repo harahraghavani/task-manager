@@ -20,7 +20,7 @@ module.exports = async (req, res, next) => {
       });
     } else {
       const findUser = await User.findById(userId);
-      console.log(findUser)
+
       if (!findUser) {
         return res.status(400).json({
           message: "User not found",
@@ -28,12 +28,12 @@ module.exports = async (req, res, next) => {
       }
 
       req.me = decodedToken;
-      console.log(req.me)
+
       return next();
     }
   } catch (err) {
     return res.status(401).json({
-      error: err.message,
+      error: "Auth token is missing",
     });
   }
 };
