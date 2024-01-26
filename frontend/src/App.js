@@ -1,10 +1,17 @@
 import './App.css';
-import Button from '@mui/material/Button';
+import CustomButton from "./components/common/CustomButton"
 
 function App() {
+  const handleConsole = () => {
+    console.log("Hello World");
+  }
+  const handleSignup = () => {
+    console.log("Hello Harsh");
+  }
   return (
     <div className="App">
-      <Button variant="contained">Hello world</Button>
+      <CustomButton submitEvent={handleConsole} />
+      <CustomButton btnText={"Signup"} />
     </div>
   );
 }
