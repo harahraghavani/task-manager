@@ -1,11 +1,20 @@
-import './App.css';
-import CustomButton from "./components/common/CustomButton"
-import FormInput from './components/common/FormInput';
+import React from "react";
+import FormInput from "./components/common/FormInput";
 
 function App() {
+  const handleSelectChange = (event) => {
+    console.log("Selected value:", event.target.value);
+  };
+
+  const selectOptions = [
+    { value: 1, label: "Option 1" },
+    { value: 2, label: "Option 2" },
+    { value: 3, label: "Option 3" },
+  ];
+
   return (
     <div className="App">
-      <FormInput label='harsh raghavani' placeholder='Enter Password' type='password' helperText='please enter password' />
+      <FormInput type="select" label="Select Option" onChangeEvent={handleSelectChange} options={selectOptions} />
     </div>
   );
 }
