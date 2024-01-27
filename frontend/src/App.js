@@ -1,17 +1,11 @@
 import './App.css';
 import CustomButton from "./components/common/CustomButton"
+import FormInput from './components/common/FormInput';
 
 function App() {
-  const handleConsole = () => {
-    console.log("Hello World");
-  }
-  const handleSignup = () => {
-    console.log("Hello Harsh");
-  }
   return (
     <div className="App">
-      <CustomButton submitEvent={handleConsole} />
-      <CustomButton btnText={"Signup"} />
+      <FormInput label='harsh raghavani' placeholder='Enter Password' type='password' helperText='please enter password' />
     </div>
   );
 }
