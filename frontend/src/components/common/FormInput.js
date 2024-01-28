@@ -5,9 +5,7 @@ import {
     IconButton,
     InputAdornment,
     InputLabel,
-    MenuItem,
     OutlinedInput,
-    Select,
     TextField,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
@@ -20,8 +18,6 @@ const FormInput = ({
     onChangeEvent,
     error = false,
     helperText = "",
-    options = [],
-    defaultValue = "",
 }) => {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -58,27 +54,6 @@ const FormInput = ({
                         placeholder={placeholder}
                         error={error}
                     />
-                    {error && <FormHelperText error={error}>{helperText}</FormHelperText>}
-                </FormControl>
-            ) : type === "select" ? (
-                <FormControl fullWidth variant="outlined">
-                    <InputLabel id={`${label}-label`} error={error}>
-                        {label}
-                    </InputLabel>
-                    <Select
-                        labelId={`${label}-label`}
-                        id={`${label}-select`}
-                        value={defaultValue}
-                        label={label}
-                        onChange={onChangeEvent}
-                        error={error}
-                    >
-                        {options.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
                     {error && <FormHelperText error={error}>{helperText}</FormHelperText>}
                 </FormControl>
             ) : (
