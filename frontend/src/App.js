@@ -1,20 +1,19 @@
 import React from "react";
 import FormInput from "./components/common/FormInput";
 import FormSelect from "./components/common/FormSelect";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import CustomButton from "./components/common/CustomButton";
-import Form from "@mui/material";
 
 function App() {
-  const { control, handleSubmit } = useForm()
-  console.log(control)
-  const handleSelectChange = (event) => {
-    console.log("Selected value:", event.target.value);
-  };
+  const { control, handleSubmit } = useForm();
 
-  const handleConsoleLog = () => {
-    console.log("Submit event from")
-  }
+  const handleSelectChange = (event) => { };
+
+  const handleConsoleLog = (data) => {
+    if (data) {
+      console.log(data);
+    }
+  };
 
   const selectOptions = [
     { value: 1, label: "Option 1" },
@@ -24,10 +23,27 @@ function App() {
 
   return (
     <div className="App">
-      <Form>
-        <FormSelect control={control} options={selectOptions} label={"Options"} error={false} onChangeEvent={handleSelectChange} name="options" helperText="this is an error" />
+      <form onSubmit={handleSubmit(handleConsoleLog)}>
+        <FormInput
+          control={control}
+          name={"name"}
+          label={"Name"}
+          required={true}
+          rules={{ required: "Name is required" }}
+        />
+        <FormSelect
+          control={control}
+          options={selectOptions}
+          label={"Options"}
+          error={false}
+          onChangeEvent={handleSelectChange}
+          name="options"
+          helperText="this is an error"
+          required={true}
+          rules={{ required: "Options is required" }}
+        />
         <CustomButton btnText="Submit" submitEvent={handleConsoleLog} />
-      </Form>
+      </form>
     </div>
   );
 }

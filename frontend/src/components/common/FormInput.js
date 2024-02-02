@@ -10,14 +10,20 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Controller } from "react-hook-form";
 
 const FormInput = ({
     type = "text",
     placeholder = "",
     label = "",
-    onChangeEvent,
+    // onChangeEvent,
     error = false,
     helperText = "",
+    rules,
+    name,
+    control,
+    defaultValue,
+    required
 }) => {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -34,38 +40,58 @@ const FormInput = ({
                     <InputLabel error={error} htmlFor="outlined-adornment-password">
                         {label}
                     </InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                        onChange={onChangeEvent}
-                        label={label}
-                        placeholder={placeholder}
-                        error={error}
+                    <Controller
+                        name={name}
+                        control={control}
+                        defaultValue={defaultValue}
+                        rules={rules}
+                        render={({ field }) => (
+                            <OutlinedInput
+                                id="outlined-adornment-password"
+                                type={showPassword ? "text" : "password"}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                // onChange={onChangeEvent}
+                                label={label}
+                                placeholder={placeholder}
+                                error={error}
+                                required={required}
+                                {...field}
+                            />
+                        )}
                     />
-                    {error && <FormHelperText error={error}>{helperText}</FormHelperText>}
+                    {rules && <FormHelperText error={error}>{rules}</FormHelperText>}
                 </FormControl>
             ) : (
-                <TextField
-                    type={type}
-                    id="outlined-basic"
-                    label={label}
-                    variant="outlined"
-                    placeholder={placeholder}
-                    onChange={onChangeEvent}
-                    error={error}
-                    helperText={error ? helperText : ""}
+                <Controller
+                    name={name}
+                    control={control}
+                    defaultValue={defaultValue}
+                    rules={rules}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            type={type}
+                            id="outlined-basic"
+                            label={label}
+                            variant="outlined"
+                            placeholder={placeholder}
+                            // onChange={onChangeEvent}
+                            error={error}
+                            required={required}
+                            helperText={error ? helperText : ""}
+                        />
+                    )}
                 />
             )}
         </>

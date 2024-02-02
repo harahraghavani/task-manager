@@ -17,14 +17,17 @@ const FormSelect = ({
     defaultValue = "",
     placeholder = "",
     name = "",
-    control
+    control,
+    rules,
+    required
 }) => {
-    console.log(name)
+
     return (
         <Controller
             name={name}
             control={control}
             defaultValue={defaultValue}
+            rules={rules}
             render={({ field }) => (
                 <FormControl fullWidth variant="outlined" error={error}>
                     <InputLabel id={`${label}-label`} error={error}>
@@ -35,10 +38,14 @@ const FormSelect = ({
                         labelId={`${label}-label`}
                         id={`${label}-select`}
                         label={label}
-                        onChange={onChangeEvent}
+                        onChange={(e) => {
+                            field.onChange(e);
+                            onChangeEvent(e);
+                        }}
                         error={error}
                         placeholder={placeholder}
                         name={name}
+                        required
                     >
                         {options.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
