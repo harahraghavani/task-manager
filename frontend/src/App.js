@@ -1,17 +1,19 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import PrivateRoute from "./router/PrivateRoute";
-import AuthPage from "./views/authentication/AuthPage";
-import Dashboard from "./views/dashboard/Dashboard";
 import "./App.css";
+import { useDisclosure } from "@chakra-ui/react";
+import "./App.css";
+import { useRef } from "react";
+import Auth from "./views/authentication/Auth"
 function App() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef();
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<AuthPage isSignup={false} />} />
-          <Route path="/signup" element={<AuthPage isSignup={true} />} />
-          {/* <Route path="/login" element={<div>Login</div>} />
-          <Route path="/signup" element={<div>signup</div>} /> */}
+          <Route path="/login" element={<Auth isSignup={false} />} />
+          <Route path="/signup" element={<Auth isSignup={true} />} />
         </Routes>
       </BrowserRouter>
     </div>
