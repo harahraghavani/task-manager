@@ -126,8 +126,8 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   try {
     const userId = req.me._id;
-
     const findUser = await User.findById(userId);
+    console.log('findUser: ', findUser);
 
     if (!findUser) {
       return res.json({
