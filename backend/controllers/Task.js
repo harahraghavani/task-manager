@@ -21,28 +21,13 @@ const getTask = async (req, res) => {
 const addTask = async (req, res) => {
   try {
     const userId = req.me._id;
-
     const taskData = req.body;
 
-    if (!taskData.title) {
+    if (!taskData.title || !taskData.status || !taskData.priority) {
       return res.json({
         status: 400,
         data: {},
-        error: "Title is required",
-      });
-    }
-    if (!taskData.status) {
-      return res.json({
-        status: 400,
-        data: {},
-        error: "Status is required",
-      });
-    }
-    if (!taskData.priority) {
-      return res.json({
-        status: 400,
-        data: {},
-        error: "Priority is required",
+        error: "Title, status and priority are required",
       });
     }
 
@@ -116,7 +101,7 @@ const editTask = async (req, res) => {
 
     const isTaskExist = await Task.findOne({
       id: { "!=": taskId },
-      title: taskData.title,
+      title: task.title,
       userId: userId,
     });
     if (isTaskExist) {
@@ -134,6 +119,7 @@ const editTask = async (req, res) => {
       message: "Task edited successfully",
     });
   } catch (error) {
+    
     return res.json({
       status: 500,
       data: {},

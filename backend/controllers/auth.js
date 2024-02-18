@@ -6,25 +6,11 @@ const SECERT_KEY = require("../constants");
 const signup = async (req, res) => {
   try {
     const signupData = req.body;
-    if (!signupData.name) {
+    if (!signupData.name || !signupData.email || !signupData.password) {
       return res.json({
         status: 400,
         data: {},
-        error: "Name is required",
-      });
-    }
-    if (!signupData.email) {
-      return res.json({
-        status: 400,
-        data: {},
-        error: "Email is required",
-      });
-    }
-    if (!signupData.password) {
-      return res.json({
-        status: 400,
-        data: {},
-        error: "Password is required",
+        error: "Name, email and password are required",
       });
     }
 
@@ -72,25 +58,11 @@ const login = async (req, res) => {
   try {
     const loginData = req.body;
 
-    if (!loginData.name) {
+    if (!loginData.name || !loginData.email || !loginData.password) {
       return res.json({
         status: 400,
         data: {},
-        error: "Name is required",
-      });
-    }
-    if (!loginData.email) {
-      return res.json({
-        status: 400,
-        data: {},
-        error: "Email is required",
-      });
-    }
-    if (!loginData.password) {
-      return res.json({
-        status: 400,
-        data: {},
-        error: "Password is required",
+        error: "Name, email and password are required",
       });
     }
 
@@ -143,7 +115,6 @@ const login = async (req, res) => {
       message: "Login successful",
     });
   } catch (error) {
-
     return res.json({
       status: 500,
       data: {},
