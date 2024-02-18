@@ -1,24 +1,55 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { Box, Card, CardHeader, Flex, Heading } from "@chakra-ui/react";
 import useShowToast from "../../hooks/useShowToast";
 import FormInput from "../../components/commmon/FormInput";
 import CommonButton from "../../components/commmon/CommonButton";
-import { EmailRqRules, NameRequiredRules, PasswordRules } from "../../constants/rules";
+import {
+    EmailRqRules,
+    NameRequiredRules,
+    PasswordRules,
+} from "../../constants/rules";
+import { api } from "../../api/index";
+import { LOGIN_USER_API, SIGNUP_USER_API } from "../../api/apiURL";
+import { checkSuccessResponse } from "../../utils/utils";
 
 const Auth = ({ isSignup }) => {
+    const navigate = useNavigate();
     const showToast = useShowToast();
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
         mode: "onChange",
     });
 
-    const onSubmit = (data) => {
-        console.log(data);
-        showToast({ message: "Login Successful", closeBtn: true });
+    const onSubmit = async (data) => {
+        const payload = {
+            name: data.name.trim(),
+            email: data.email.trim(),
+            password: data.password.trim(),
+        };
+        if (data) {
+            const response = await api({
+                endpoint: isSignup ? SIGNUP_USER_API : LOGIN_USER_API,
+                payloadData: payload,
+            });
+            if (checkSuccessResponse(response)) {
+                const token = response?.data?.data?.authToken;
+                if (!isSignup) {
+                    localStorage.setItem("token", token);
+                }
+                isSignup ? navigate("/login") : navigate("/");
+                showToast({
+                    message: isSignup ? "Signup Successful" : "Login Successful",
+                    closeBtn: true,
+                });
+            }
+        }
+        reset();
     };
 
     return (
@@ -60,7 +91,10 @@ const Auth = ({ isSignup }) => {
                         />
                     </Box>
                     <Box py={4} textAlign="center">
-                        <CommonButton btnText={isSignup ? "Sign Up" : "Login"} type="submit" />
+                        <CommonButton
+                            btnText={isSignup ? "Sign Up" : "Login"}
+                            type="submit"
+                        />
                     </Box>
                 </form>
             </Card>

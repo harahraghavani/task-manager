@@ -19,8 +19,13 @@ import { BiLogOut } from "react-icons/bi";
 
 // Components
 import LinkButton from "../commmon/LinkButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+
+import { api } from "../../api/index"
+import { LOGOUT_USER_API } from "../../api/apiURL";
+import { checkSuccessResponse } from "../../utils/utils";
+import useShowToast from "../../hooks/useShowToast"
 export default function Layout({ children }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -52,7 +57,21 @@ export default function Layout({ children }) {
 }
 
 const SidebarContent = ({ onOpen, btnRef, onClose, ...rest }) => {
-    const handleLogout = async () => { };
+    const navigate = useNavigate()
+    const showToast = useShowToast()
+    const handleLogout = async () => {
+        const response = await api({
+            endpoint: LOGOUT_USER_API
+        })
+        if (checkSuccessResponse(response)) {
+            localStorage.removeItem("token");
+            navigate("/login")
+            showToast({
+                message: "Logout Successful",
+                closeBtn: true
+            })
+        }
+    };
 
     return (
         <Box
@@ -93,21 +112,21 @@ const SidebarContent = ({ onOpen, btnRef, onClose, ...rest }) => {
                     <LinkButton
                         to={"/"}
                         leftIcon={<LuLayoutDashboard />}
-                        text={"Dashboard"}
+                        text={"Tasks"}
                         onClick={() => onClose()}
                     />
-                    <LinkButton
+                    {/* <LinkButton
                         to={"/user"}
                         leftIcon={<LuUsers />}
                         text={"User"}
                         onClick={() => onClose()}
-                    />
-                    <LinkButton
+                    /> */}
+                    {/* <LinkButton
                         to={"/package"}
                         leftIcon={<GrPlan />}
                         text={"Package"}
                         onClick={() => onClose()}
-                    />
+                    /> */}
                 </Flex>
                 <Button p={4} leftIcon={<BiLogOut />} onClick={handleLogout}>
                     Logout
